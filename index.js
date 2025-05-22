@@ -1,33 +1,17 @@
-const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const cors = require('cors');
-
 dotenv.config();
 
-const app = express();
+const app = require('./app');
 
-// Middlewares
-app.use(cors());
-app.use(express.json());
+const PORT = process.env.PORT || 3000;
 
-const authRoutes = require('./routes/authRoutes');
-const movieRoutes = require('./routes/movieRoutes');
-app.use('/auth', authRoutes);
-app.use('/movies', movieRoutes);
-
-// Ruta de prueba
-app.get('/', (req, res) => {
-    res.send('🎬 Backend funcionando');
-});
-
-// Conexión a MongoDB y arranque del servidor
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {
         console.log('✅ MongoDB conectado');
-        app.listen(process.env.PORT || 3000, () => {
-            console.log(`🚀 Servidor en http://localhost:${process.env.PORT || 3000}`);
+        app.listen(PORT, () => {
+            console.log(`🚀 Servidor en http://localhost:${PORT}`);
         });
     })
     .catch(err => {
